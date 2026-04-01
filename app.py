@@ -8,11 +8,4 @@ def user_input():
 def main():
     stock_symbol, chart, time_series, beginning_date, end_date = user_input()
 
-    print("User Inputs:")
-    print("Stock Symbol:", stock_symbol)
-    print("Chart:", chart)
-    print("Time Series:", time_series)
-    print("Beginning Date:", beginning_date)
-    print("End Date:", end_date)
-
 main()
