@@ -14,3 +14,5 @@ def main():
     print("Time Series:", time_series)
     print("Beginning Date:", beginning_date)
     print("End Date:", end_date)
+
+main()
