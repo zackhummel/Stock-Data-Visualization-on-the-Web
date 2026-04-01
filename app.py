@@ -4,3 +4,5 @@ def user_input():
     time_series = input("Which time series function: ")
     beginning_date = input("Beginning date: ")
     end_date = input("End date: ")
+def main():
+    user_input()
