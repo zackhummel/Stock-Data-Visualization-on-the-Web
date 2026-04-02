@@ -1,16 +1,31 @@
-import pygal
+import pygal, tempfile, webbrowser, os
 from lxml import etree
-import tempfile
-import webbrowser
-import os
+from APIrequests import getRequestedSymbolData
 
 
 def user_input():
-    stock_symbol = input("Stock Symbol: ")
-    chart = input("Which chart would you like: ")
-    time_series = input("Which time series function: ")
-    beginning_date = input("Beginning date: ")
-    end_date = input("End date: ")
+
+    try: 
+        stock_symbol = input("Stock Symbol: ")
+
+        print("Chart Types\n------------")
+        print("1. Bar\n2. Line")
+        chart = int(input("Which chart would you like (1, 2): "))
+
+        print("Select Time Series\n------------")
+        print("1. Intraday\n2. Daily\n3. Weekly\n4. Monthly")
+        time_series = int(input("Which time series function (1, 2, 3, 4): "))
+
+
+        beginning_date = input("Beginning date (YYYY-MM-DD): ")
+
+
+        end_date = input("End date (YYYY-MM-DD): ")
+
+    except Exception as e:
+        print(f"Something went wrong.\n{e}")
+
+
     return stock_symbol, chart, time_series, beginning_date, end_date
 
 def create_chart(labels, values, chart):
@@ -24,12 +39,12 @@ def create_chart(labels, values, chart):
     """
 
     # Normalize input
-    chart = chart.lower()
+    #chart = chart.lower()
 
     # Choose chart type
-    if chart == "line":
+    if chart == 2:
         pygal_chart = pygal.Line(x_label_rotation=20)
-    elif chart == "bar":
+    elif chart == 1:
         pygal_chart = pygal.Bar(x_label_rotation=20)
     else:
         raise ValueError("Invalid chart type. Choose 'line' or 'bar'.")
@@ -53,8 +68,13 @@ def create_chart(labels, values, chart):
     tmp_file.close()
 
     webbrowser.open(f"file://{os.path.abspath(tmp_file.name)}")
+
 def main():
+    print("Stock Data Visualizer\n--------------------------------")
     stock_symbol, chart, time_series, beginning_date, end_date = user_input()
+    
+    print(getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date))
 
 
-main()
+if __name__ == "__main__":
+    main()
