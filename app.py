@@ -50,7 +50,7 @@ def create_chart(labels,open,high,low,close,chart,stock_symbol):
         raise ValueError("Invalid chart type. Choose 'line' or 'bar'.")
 
     # Add data
-    pygal_chart.title = f"Stock Data for {stock_symbol} from {labels[-1]} to {labels[1]}"
+    pygal_chart.title = f"Stock Data for {stock_symbol} from {labels[-1]} to {labels[0]}"
     pygal_chart.x_labels = labels
     pygal_chart.add("Open", open)
     pygal_chart.add("High", high)
@@ -74,33 +74,40 @@ def create_chart(labels,open,high,low,close,chart,stock_symbol):
 
 def main():
     print("\nStock Data Visualizer\n--------------------------------")
-    stock_symbol, chart, time_series, beginning_date, end_date = user_input()
-    #Remove this when API works
-    print(getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date))
 
-    symbolData = getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date)
-    
-    labels = []
-    opens, highs, lows, closes = [], [], [], []
+    while True:
+        stock_symbol, chart, time_series, beginning_date, end_date = user_input()
+        #Remove this when API works
+        #print(getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date))
 
-    if isinstance(symbolData, dict):
-        iterable = symbolData.items()
-    else:
-        iterable = symbolData 
+        symbolData = getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date)
+        
+        labels = []
+        opens, highs, lows, closes = [], [], [], []
 
-    for item in iterable:
         if isinstance(symbolData, dict):
-            date, values = item
+            iterable = symbolData.items()
         else:
-            date, values = item 
+            iterable = symbolData 
 
-        labels.append(date)
-        opens.append(float(values['1. open']))
-        highs.append(float(values['2. high']))
-        lows.append(float(values['3. low']))
-        closes.append(float(values['4. close']))
+        for item in iterable:
+            if isinstance(symbolData, dict):
+                date, values = item
+            else:
+                date, values = item 
 
-    create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
+            labels.append(date)
+            opens.append(float(values['1. open']))
+            highs.append(float(values['2. high']))
+            lows.append(float(values['3. low']))
+            closes.append(float(values['4. close']))
+
+        create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
+
+        tryAgain = input("Would you like to try another symbol? (Y/N)")
+
+        if tryAgain.lower() == "n" or tryAgain.lower() == "no":
+            break
 
 if __name__ == "__main__":
     main()

@@ -5,7 +5,7 @@ from apiKey import getAPIKey
 APIkey = getAPIKey()
 
 def getRequestedSymbolData(stockSymbol, timeSeries, startDate, endDate):
-    returnValue = []
+    returnValue = {}
     
     try:
         trueTimeSeries = ""
@@ -61,30 +61,31 @@ def getRequestedSymbolData(stockSymbol, timeSeries, startDate, endDate):
 
         for i in data.keys():
             if dt.strptime(i, "%Y-%m-%d") >= convertedStart and dt.strptime(i, "%Y-%m-%d") <= convertedEnd:
-                print(i)
+                #print(i)
                 dicKeys.append(i)
 
         # TODO: Use the keys in 'dicKeys's to get only between the dates selected
         # ie: data[dicKeys[0]] though in a loop to get all of them at once
+
+        for i in dicKeys:
+            returnValue[i] = data[i]
+            #print(returnValue[i])
     
     except KeyError as e:
         print(f"Invalid key used.\n{e}")
-        returnValue = []
+        returnValue.clear()
 
     except ValueError as e:
         print(f"End date before start date.\n{e}")
-        returnValue = []
+        returnValue.clear()
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        returnValue = []
-
-    else:
-        returnValue = data
+        returnValue.clear()
     
     return returnValue
 
 # only runs if ran from this file
 # for testing
 if __name__ == "__main__":
-    getRequestedSymbolData("GOOGL", 2, "2025-12-01", "2025-12-31")
+    print(getRequestedSymbolData("GOOGL", 2, "2025-12-01", "2025-12-31"))
