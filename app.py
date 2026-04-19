@@ -1,4 +1,4 @@
-import pygal, tempfile, webbrowser, os
+import pygal, tempfile, webbrowser, os, csv
 from lxml import etree
 from APIrequests import getRequestedSymbolData
 from flask import Flask, render_template, request, redirect, url_for, Blueprint, flash
@@ -13,6 +13,21 @@ app.config["DEBUG"] = True
 
 #flash the secret key to secure sessions
 app.config['SECRET_KEY'] = 'your secret key'
+
+def load_symbols():
+    symbols = set()
+    try:
+        with open(('stock_symbols.csv'), 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if row:  # Ensure the row is not empty
+                    symbols.add(row[0].strip())
+    except FileNotFoundError:
+        print("stocks.csv is not found.")
+    return symbols
+
+valid_symbols = load_symbols()
+print(f"Valid symbols loaded: {valid_symbols}")
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -38,7 +53,7 @@ def index():
         chart_html = create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
 
         return render_template('index.html', chart=chart_html)
-    return render_template('index.html', chart=None)
+    return render_template('index.html', chart=None, valid_symbols=valid_symbols)
 
 def create_chart(labels,open,high,low,close,chart,stock_symbol):
     """
