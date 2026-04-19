@@ -6,13 +6,13 @@
 <body>
     <h1>Stock Data Visualization</h1>
     <form method="POST" action="/">
-        <label>Stock Symbol:</label>
+    <label>Stock Symbol:</label>
     <select name="stock_symbol" required>
-        <option value="" disabled selected>Select a symbol</option>
-        {% for symbol in symbols %}
+        <option disabled selected>Select a stock</option>
+        {% for symbol in valid_symbols %}
             <option value="{{ symbol }}">{{ symbol }}</option>
         {% endfor %}
-    </select>
+</select>
     <br><br>
         <input type="text" id="stock_symbol" name="stock_symbol" required>
         <br><br>
