@@ -14,32 +14,40 @@ app.config["DEBUG"] = True
 #flash the secret key to secure sessions
 app.config['SECRET_KEY'] = 'your secret key'
 
-def user_input():
-# get user input from a flask page
-
-    try: 
+@app.route("/", methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
         stock_symbol = request.form['stock_symbol']
-        # get user input from a flask page
-
-        print("\nChart Types\n------------")
-        print("1. Bar\n2. Line")
         chart = int(request.form['chart_type'])
-    
-        print("\nSelect Time Series\n------------")
-        print("1. Intraday\n2. Daily\n3. Weekly\n4. Monthly")
         time_series = int(request.form['time_series'])
-
-
         beginning_date = request.form['beginning_date']
-
-
         end_date = request.form['end_date']
 
-    except Exception as e:
-        print(f"Something went wrong.\n{e}")
+        symbolData = getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date)
 
+        labels = []
+        opens, highs, lows, closes = [], [], [], []
 
-    return stock_symbol, chart, time_series, beginning_date, end_date
+        if isinstance(symbolData, dict):
+            iterable = symbolData.items()
+        else:
+            iterable = symbolData
+
+        for item in iterable:
+            if isinstance(symbolData, dict):
+                date, values = item
+            else:
+                date, values = item
+
+            labels.append(date)
+            opens.append(float(values['1. open']))
+            highs.append(float(values['2. high']))
+            lows.append(float(values['3. low']))
+            closes.append(float(values['4. close']))
+
+        create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
+
+    return render_template('index.html')
 
 def create_chart(labels,open,high,low,close,chart,stock_symbol):
     """
