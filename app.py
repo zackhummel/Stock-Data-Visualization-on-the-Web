@@ -97,7 +97,7 @@ def main():
     print("\nStock Data Visualizer\n--------------------------------")
 
     while True:
-        stock_symbol, chart, time_series, beginning_date, end_date = user_input()
+        stock_symbol, chart, time_series, beginning_date, end_date = index()
         #Remove this when API works
         #print(getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date))
 
