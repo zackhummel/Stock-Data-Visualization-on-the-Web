@@ -6,7 +6,14 @@
 <body>
     <h1>Stock Data Visualization</h1>
     <form method="POST" action="/">
-        <label for="stock_symbol">Stock Symbol:</label>
+        <label>Stock Symbol:</label>
+    <select name="stock_symbol" required>
+        <option value="" disabled selected>Select a symbol</option>
+        {% for symbol in symbols %}
+            <option value="{{ symbol }}">{{ symbol }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
         <input type="text" id="stock_symbol" name="stock_symbol" required>
         <br><br>
         <label for="chart_type">Chart Type:</label>

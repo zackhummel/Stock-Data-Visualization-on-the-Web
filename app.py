@@ -52,7 +52,7 @@ def index():
             closes.append(float(values['4. close']))
         chart_html = create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
 
-        return render_template('index.html', chart=chart_html)
+        return render_template('index.html', chart=chart_html, valid_symbols=valid_symbols)
     return render_template('index.html', chart=None, valid_symbols=valid_symbols)
 
 def create_chart(labels,open,high,low,close,chart,stock_symbol):
