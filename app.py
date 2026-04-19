@@ -78,57 +78,9 @@ def create_chart(labels,open,high,low,close,chart,stock_symbol):
     pygal_chart.add("Low", low)
     pygal_chart.add("Close", close)
 
-    # Render SVG
-    svg_data = pygal_chart.render()
 
-    # Wrap in HTML
-    html = etree.Element("html")
-    body = etree.SubElement(html, "body")
-    body.append(etree.fromstring(svg_data))
 
-    # Save and open in browser
-    tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
-    tmp_file.write(etree.tostring(html, pretty_print=True, method="html"))
-    tmp_file.close()
-
-    webbrowser.open(f"file://{os.path.abspath(tmp_file.name)}")
-
-def main():
-    print("\nStock Data Visualizer\n--------------------------------")
-
-    while True:
-        stock_symbol, chart, time_series, beginning_date, end_date = index()
-        #Remove this when API works
-        #print(getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date))
-
-        symbolData = getRequestedSymbolData(stock_symbol, time_series, beginning_date, end_date)
-        
-        labels = []
-        opens, highs, lows, closes = [], [], [], []
-
-        if isinstance(symbolData, dict):
-            iterable = symbolData.items()
-        else:
-            iterable = symbolData 
-
-        for item in iterable:
-            if isinstance(symbolData, dict):
-                date, values = item
-            else:
-                date, values = item 
-
-            labels.append(date)
-            opens.append(float(values['1. open']))
-            highs.append(float(values['2. high']))
-            lows.append(float(values['3. low']))
-            closes.append(float(values['4. close']))
-
-        create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
-
-        tryAgain = input("Would you like to try another symbol? (Y/N)")
-
-        if tryAgain.lower() == "n" or tryAgain.lower() == "no":
-            break
+    return pygal_chart.render().decode("utf-8")
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
