@@ -28,26 +28,17 @@ def index():
         labels = []
         opens, highs, lows, closes = [], [], [], []
 
-        if isinstance(symbolData, dict):
-            iterable = symbolData.items()
-        else:
-            iterable = symbolData
-
-        for item in iterable:
-            if isinstance(symbolData, dict):
-                date, values = item
-            else:
-                date, values = item
-
+        iterable = symbolData.items() if isinstance(symbolData, dict) else symbolData
+        for date, values in iterable:
             labels.append(date)
             opens.append(float(values['1. open']))
             highs.append(float(values['2. high']))
             lows.append(float(values['3. low']))
             closes.append(float(values['4. close']))
+        chart_html = create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
 
-        create_chart(labels,opens,highs,lows,closes,chart,stock_symbol)
-
-    return render_template('index.html')
+        return render_template('index.html', chart=chart_html)
+    return render_template('index.html', chart=None)
 
 def create_chart(labels,open,high,low,close,chart,stock_symbol):
     """
