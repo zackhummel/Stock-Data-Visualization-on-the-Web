@@ -1,26 +1,39 @@
 import pygal, tempfile, webbrowser, os
 from lxml import etree
 from APIrequests import getRequestedSymbolData
+from flask import Flask, render_template, request, redirect, url_for, Blueprint, flash
+from flask_sqlalchemy import SQLAlchemy
 
+
+#create a Flask object
+app = Flask(__name__)
+
+#allow the application to update while the server is running
+app.config["DEBUG"] = True
+
+#flash the secret key to secure sessions
+app.config['SECRET_KEY'] = 'your secret key'
 
 def user_input():
+# get user input from a flask page
 
     try: 
-        stock_symbol = input("Enter the Stock Symbol you are looking for: ")
+        stock_symbol = request.form['stock_symbol']
+        # get user input from a flask page
 
         print("\nChart Types\n------------")
         print("1. Bar\n2. Line")
-        chart = int(input("Which chart type would you like? (1, 2): "))
-
+        chart = int(request.form['chart_type'])
+    
         print("\nSelect Time Series\n------------")
         print("1. Intraday\n2. Daily\n3. Weekly\n4. Monthly")
-        time_series = int(input("Which time series function (1, 2, 3, 4): "))
+        time_series = int(request.form['time_series'])
 
 
-        beginning_date = input("\nBeginning date (YYYY-MM-DD): ")
+        beginning_date = request.form['beginning_date']
 
 
-        end_date = input("End date (YYYY-MM-DD): ")
+        end_date = request.form['end_date']
 
     except Exception as e:
         print(f"Something went wrong.\n{e}")
