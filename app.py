@@ -62,7 +62,7 @@ def create_chart(labels,open,high,low,close,chart,stock_symbol):
         raise ValueError("Invalid chart type. Choose 'line' or 'bar'.")
 
     # Add data
-    pygal_chart.title = f"Stock Data for {stock_symbol} from {labels[-1]} to {labels[0]}"
+    pygal_chart.title = f"Stock Data for {stock_symbol} from {labels[0]} to {labels[-1]}"
     pygal_chart.x_labels = labels
     pygal_chart.add("Open", open)
     pygal_chart.add("High", high)
