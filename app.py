@@ -17,7 +17,7 @@ app.config['SECRET_KEY'] = 'your secret key'
 def load_symbols():
     symbols = set()
     try:
-        with open(('stock_symbols.csv'), 'r') as csvfile:
+        with open(('stocks.csv'), 'r') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 if row:  # Ensure the row is not empty
